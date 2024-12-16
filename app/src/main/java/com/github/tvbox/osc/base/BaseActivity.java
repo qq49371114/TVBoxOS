@@ -23,6 +23,7 @@ import com.github.tvbox.osc.util.AppManager;
 import com.kingja.loadsir.callback.Callback;
 import com.kingja.loadsir.core.LoadService;
 import com.kingja.loadsir.core.LoadSir;
+import io.github.pixee.security.BoundedLineReader;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -158,7 +159,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
             AssetManager assets = getAssets();
             BufferedReader bf = new BufferedReader(new InputStreamReader(assets.open(fileName)));
             String line;
-            while ((line = bf.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(bf, 5_000_000)) != null) {
                 stringBuilder.append(line);
             }
             return stringBuilder.toString();

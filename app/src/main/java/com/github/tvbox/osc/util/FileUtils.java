@@ -4,6 +4,7 @@ import android.os.Environment;
 import android.text.TextUtils;
 
 import com.github.tvbox.osc.base.App;
+import io.github.pixee.security.BoundedLineReader;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -82,7 +83,7 @@ public class FileUtils {
         try {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(new File(path)), charsetName));// 读取文件
             String thisLine = null;
-            while ((thisLine = in.readLine()) != null) {
+            while ((thisLine = BoundedLineReader.readLine(in, 5_000_000)) != null) {
                 jsonString += thisLine;
             }
             in.close();
@@ -188,7 +189,7 @@ public class FileUtils {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(getLocal(path))));
             StringBuilder sb = new StringBuilder();
             String text;
-            while ((text = br.readLine()) != null) sb.append(text).append("\n");
+            while ((text = BoundedLineReader.readLine(br, 5_000_000)) != null) sb.append(text).append("\n");
             br.close();
             return sb.toString();
         } catch (Exception e) {
